@@ -1,0 +1,8 @@
+streamlit
+cassandra-driver
+cassio
+gradientai
+nbconvert
+llama-index
+pypdf
+tiktoken
