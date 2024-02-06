@@ -32,7 +32,7 @@ def main():
 
     index_placeholder = None
     st.set_page_config(page_title = "Chat with your PDF using Llama2 & Llama Index", page_icon="🦙")
-    st.header('🦙 Chat with your PDF using Llama2 model & Llama Index')
+    st.header('🦙 Chat with your PDF using Llama2 model & Llama Index V2')
     
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
@@ -52,7 +52,7 @@ def main():
     os.environ['GRADIENT_ACCESS_TOKEN'] = "49SxShZ6rRvQu8YVAeSjoj3a91rqBWZm"
     os.environ['GRADIENT_WORKSPACE_ID'] = "6114a445-d716-4ff4-ac7b-a7ab9ad42995_workspace"
 
-    llm = GradientBaseModelLLM(base_model_slug="llama2-7b-chat", max_tokens=400)
+    llm = GradientBaseModelLLM(base_model_slug="llama2-7b-chat", max_tokens=200)
 
     embed_model = GradientEmbedding(
         gradient_access_token = os.environ["GRADIENT_ACCESS_TOKEN"],
