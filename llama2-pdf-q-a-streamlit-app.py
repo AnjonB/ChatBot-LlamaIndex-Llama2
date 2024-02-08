@@ -52,7 +52,7 @@ def main():
     os.environ['GRADIENT_ACCESS_TOKEN'] = "49SxShZ6rRvQu8YVAeSjoj3a91rqBWZm"
     os.environ['GRADIENT_WORKSPACE_ID'] = "6114a445-d716-4ff4-ac7b-a7ab9ad42995_workspace"
 
-    llm = GradientBaseModelLLM(base_model_slug="llama2-7b-chat", max_tokens=200)
+    llm = GradientBaseModelLLM(base_model_slug="llama2-7b-chat", max_tokens=400,is_chat_model=True)
 
     embed_model = GradientEmbedding(
         gradient_access_token = os.environ["GRADIENT_ACCESS_TOKEN"],
@@ -62,7 +62,7 @@ def main():
     service_context = ServiceContext.from_defaults(
     llm = llm,
     embed_model = embed_model,
-    chunk_size=256)
+    chunk_size=256,pydantic_program_mode="llm")
 
     set_global_service_context(service_context)
 
