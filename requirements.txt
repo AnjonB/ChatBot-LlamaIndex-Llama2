@@ -3,6 +3,6 @@ cassandra-driver
 cassio
 gradientai
 nbconvert
-llama-index
+llama-index==0.9.44
 pypdf
 tiktoken
