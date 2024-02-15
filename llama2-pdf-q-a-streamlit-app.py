@@ -31,7 +31,7 @@ def create_datastax_connection():
 def main():
 
     index_placeholder = None
-    st.set_page_config(page_title = "Chat with your PDF using Llama2 & Llama Index", page_icon="🦙")
+    st.set_page_config(page_title = "Chat with your RFP Summerier", page_icon="🦙")
     st.header('🦙 Chat with your PDF using Llama2 model & Llama Index V3')
     
     if "conversation" not in st.session_state:
@@ -68,7 +68,7 @@ def main():
 
     with st.sidebar:
         st.subheader('Upload Your PDF File')
-        docs = st.file_uploader('⬆️ Upload your PDF & Click to process',
+        docs = st.file_uploader('⬆️ Upload RPF Document & Click to process',
                                 accept_multiple_files = False, 
                                 type=['pdf'])
         if st.button('Process'):
