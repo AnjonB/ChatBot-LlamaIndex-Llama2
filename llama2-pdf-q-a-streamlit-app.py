@@ -32,11 +32,23 @@ def create_datastax_connection():
 
 def main():
     default_questions = [
-    "What is the main topic of the PDF?",
-    "Can you summarize the key points?",
-    "What are the main conclusions?",
-    "How is this topic relevant to my field?",
-    "Can you provide examples from the PDF?"]
+    "How would you describe the objectives and scope outlined in the RFP document?",
+    "Can you provide the pertinent dates specified in the RFP, such as submission deadlines, last date for queries, and any pre-bid query periods?",
+    "What are the criteria outlined in the RFP for pre-qualification, determining bid eligibility, or any other eligibility requirements?",
+    "Could you outline the technical qualification criteria specified in the RFP, including evaluation marks or qualification thresholds?",
+    "What constitutes the commercial qualification criteria as stated in the RFP?",
+    "Is the bidding process structured as a reverse auction?",
+    "What penalties are outlined in the RFP for non-compliance or breach of terms?",
+    "Are there any Service Level Agreements (SLAs) specified in the RFP? If so, what are they?",
+    "Can you provide details regarding the project timelines specified in the RFP for bid submission and execution?",
+    "What does the indemnity clause in the RFP entail?",
+    "Does the RFP allow for subcontracting, and if so, what are the provisions outlined in the subcontracting clause?",
+    "What is the requirement for a Performance Bank Guarantee (PBG) in the bid?",
+    "What is the specified security deposit amount outlined in the bid document?",
+    "Could you clarify the concept of Earnest Money (EM) in the bid?",
+    "What are the payment terms, milestones, and schedule outlined in the RFP?",
+    "Are there any training requirements stipulated in the RFP for the successful bidder?"
+]
     
     index_placeholder = None
     st.set_page_config(page_title = "Chat with your PDF using Llama2 & Llama Index", page_icon="🦙")
