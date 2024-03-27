@@ -101,6 +101,7 @@ def main():
     if st.session_state.activate_chat:
         if selected_question:
             prompt = selected_question
+            st.session_state.selected_question = ""
         else:
             prompt = st.chat_input("Ask your question from the PDF?")
 
