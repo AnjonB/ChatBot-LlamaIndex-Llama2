@@ -31,11 +31,17 @@ def create_datastax_connection():
     return astra_session
 
 def main():
-
+    default_questions = [
+    "What is the main topic of the PDF?",
+    "Can you summarize the key points?",
+    "What are the main conclusions?",
+    "How is this topic relevant to my field?",
+    "Can you provide examples from the PDF?"]
+    
     index_placeholder = None
     st.set_page_config(page_title = "Chat with your PDF using Llama2 & Llama Index", page_icon="🦙")
     st.header('🦙 Chat with your PDF using Llama2 model & Llama Index')
-    
+    selected_question = st.selectbox("Select a default question", [""] + default_questions)
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
 
@@ -92,8 +98,13 @@ def main():
                         st.session_state.query_engine = query_engine
                     st.session_state.activate_chat = True
 
-    if st.session_state.activate_chat == True:
-        if prompt := st.chat_input("Ask your question from the PDF?"):
+    if st.session_state.activate_chat:
+        if selected_question:
+            prompt = selected_question
+        else:
+            prompt = st.chat_input("Ask your question from the PDF?")
+
+        if prompt:
             with st.chat_message("user", avatar = '👨🏻'):
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", 
