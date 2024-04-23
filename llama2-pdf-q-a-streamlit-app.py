@@ -16,9 +16,9 @@ from fine_tune import FineTuner
 @st.cache_resource
 def create_datastax_connection():
 
-    cloud_config= {'secure_connect_bundle': 'secure-connect-pdf-summarization.zip'}
+    cloud_config= {'secure_connect_bundle': 'secure-connect-llm-ai-astra-db.zip'}
 
-    with open("pdf-summarization-token.json") as f:
+    with open("llm-ai-astra-db-token.json") as f:
         secrets = json.load(f)
 
     CLIENT_ID = secrets["clientId"]
@@ -30,16 +30,38 @@ def create_datastax_connection():
     return astra_session
 
 def main():
-
+    default_questions = [
+    "How would you describe the objectives and scope outlined in the RFP document?",
+    "Can you provide the pertinent dates specified in the RFP, such as submission deadlines, last date for queries, and any pre-bid query periods?",
+    "What are the criteria outlined in the RFP for pre-qualification, determining bid eligibility, or any other eligibility requirements?",
+    "Could you outline the technical qualification criteria specified in the RFP, including evaluation marks or qualification thresholds?",
+    "What constitutes the commercial qualification criteria as stated in the RFP?",
+    "Is the bidding process structured as a reverse auction?",
+    "What penalties are outlined in the RFP for non-compliance or breach of terms?",
+    "Are there any Service Level Agreements (SLAs) specified in the RFP? If so, what are they?",
+    "Can you provide details regarding the project timelines specified in the RFP for bid submission and execution?",
+    "What does the indemnity clause in the RFP entail?",
+    "Does the RFP allow for subcontracting, and if so, what are the provisions outlined in the subcontracting clause?",
+    "What is the requirement for a Performance Bank Guarantee (PBG) in the bid?",
+    "What is the specified security deposit amount outlined in the bid document?",
+    "Could you clarify the concept of Earnest Money (EM) in the bid?",
+    "What are the payment terms, milestones, and schedule outlined in the RFP?",
+    "Are there any training requirements stipulated in the RFP for the successful bidder?"
+]
+    
     index_placeholder = None
     st.set_page_config(page_title = "RFP Summariser", page_icon="🤖")
     st.header('💬 With your RFP 📃')
+    
     
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
 
     if "activate_chat" not in st.session_state:
         st.session_state.activate_chat = False
+
+    if "prompt" not in st.session_state:
+        st.session_state.prompt = None
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -50,8 +72,8 @@ def main():
 
     session = create_datastax_connection()
 
-    os.environ['GRADIENT_ACCESS_TOKEN'] = "49SxShZ6rRvQu8YVAeSjoj3a91rqBWZm"
-    os.environ['GRADIENT_WORKSPACE_ID'] = "6114a445-d716-4ff4-ac7b-a7ab9ad42995_workspace"
+    os.environ['GRADIENT_ACCESS_TOKEN'] = "VOPDqjeqdpAksljbgTDEOWsujnpM3Tis"
+    os.environ['GRADIENT_WORKSPACE_ID'] = "662cbc5b-5a11-4250-811b-2664a962ae2a_workspace"
 
     
     
@@ -70,7 +92,7 @@ def main():
                     
                     #model_adapter_id = "348d6eb3-32e2-44cb-92a2-fde14bd42cee_model_adapter"
                     #model_adapter_id = "c6e2a7cb-5941-412d-96bf-b7e3c94c24c4_model_adapter"
-                    model_adapter_id = "1d37c7c7-d1b0-4d9c-bfd0-69fabbc2807d_model_adapter"            #Fine-Tuning with 100 questions
+                    model_adapter_id = "45e17435-923b-4699-a085-13b3a93c4319_model_adapter"            #Fine-Tuning with 100 questions
                     llm = GradientModelAdapterLLM(model_adapter_id = model_adapter_id, max_tokens=400)
                     # Initialize Gradient AI Cloud with credentials
                     embed_model = GradientEmbedding(
@@ -90,7 +112,7 @@ def main():
                     if "query_engine" not in st.session_state:
                         st.session_state.query_engine = query_engine
                     st.session_state.activate_chat = True
-
+                  
     if st.session_state.activate_chat == True:
         if prompt := st.chat_input("Ask your question from the PDF?"):
             with st.chat_message("user", avatar = '👨🏻'):
@@ -108,10 +130,30 @@ def main():
             st.session_state.messages.append({"role": "assistant", 
                                               "avatar" :'🤖',
                                               "content": pdf_response})
-        else:
-            st.markdown(
-                'Upload your PDFs to chat'
-                )
+    else:
+        st.markdown(
+            'Upload your PDFs to chat'
+        )
+
+    
+    selected_question = st.sidebar.selectbox("Select a question", default_questions)
+    if st.sidebar.button("Ask"):
+            st.session_state.activate_chat = True
+            prompt = selected_question
+            with st.chat_message("user", avatar = '👨🏻'):
+                st.markdown(prompt)
+            st.session_state.messages.append({"role": "user", 
+                                              "avatar" :'👨🏻',
+                                              "content": prompt})
+            query_index_placeholder = st.session_state.query_engine
+            pdf_response = query_index_placeholder.query(prompt)
+            #cleaned_response = pdf_response.response
+            cleaned_response = pdf_response
+            with st.chat_message("assistant", avatar='🤖'):
+                st.markdown(pdf_response)
+            st.session_state.messages.append({"role": "assistant", 
+                                              "avatar" :'🤖',
+                                              "content": pdf_response})
 
 
 if __name__ == '__main__':
